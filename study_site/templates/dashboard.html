@@ -30,13 +30,16 @@
                     <button type="submit">Просмотреть курс</button>
                 </form>
                 <form method="get" action="{% url 'add_lesson' course.id %}">
-                    <button type="submit">Добавить курс</button>
+                    <button type="submit">Добавить урок к курсу {{ course.title }}</button>
                 </form>
             </li>
         {% endfor %}
         {% else %}
         <p>У вас нет курсов.</p>
         {% endif %}
+        <form method="get" action="{% url 'add_course' %}">
+            <button type="submit">Добавить курс</button>
+        </form>
     </ul>
 {% endif %}
 
