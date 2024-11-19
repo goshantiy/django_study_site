@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Матчи</h2>
+
+    <!-- Форма фильтрации -->
+    <form method="get" action="{% url 'match_list' %}">
+        <h3>Фильтровать матчи</h3>
+        {{ form.as_p }}  <!-- Отображаем поля формы фильтрации -->
+        <button type="submit" class="btn btn-primary">Применить фильтр</button>
+    </form>
+
+    <!-- Отображение списка матчей -->
+    {% if matches %}
+        <ul>
+            {% for match in matches %}
+                <li>
+                    <strong>{{ match.team_1.name }} vs {{ match.team_2.name }}</strong> - 
+                    {{ match.date }} - {{ match.result }} - {{ match.location }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет матчей, соответствующих фильтрам.</p>
+    {% endif %}
+
+    {% if user.role == 'teacher' %}
+        <a href="{% url 'create_match' %}">Добавить матч</a>
+    {% endif %}
+{% endblock %}

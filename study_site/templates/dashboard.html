@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<h2>Добро пожаловать, {{ user.username }}</h2>
+{% if user.role == 'teacher' %}
+<h3>Ваша роль - тренер</h3>
+{% endif %}
+{% if user.role == 'student' %}
+<h3>Ваша роль - игрок</h3>
+{% endif %}
+
+<!-- Actions for Teachers -->
+{% if user.role == 'teacher' %}
+    <h3>Управление</h3>
+    <ul>
+        <li><a href="{% url 'team_list' %}">Команды</a></li>
+        <li><a href="{% url 'match_list' %}">Матчи</a></li>
+    </ul>
+    
+    <h3>Ваши курсы тренировок</h3>
+    <ul>
+        {% if courses %}
+        {% for course in courses %}
+            <li>
+                <strong>{{ course.title }}</strong>
+                <form method="get" action="{% url 'course_detail' course.id %}">
+                    <button type="submit">Просмотреть курс</button>
+                </form>
+                <form method="get" action="{% url 'add_lesson' course.id %}">
+                    <button type="submit">Добавить курс</button>
+                </form>
+            </li>
+        {% endfor %}
+        {% else %}
+        <p>У вас нет курсов.</p>
+        {% endif %}
+    </ul>
+{% endif %}
+
+<!-- Actions for Students -->
+{% if user.role == 'student' %}
+    <h3>Ваши команды</h3>
+    {% if user.teams.all %}
+        <ul>
+            {% for team in user.teams.all %}
+                <li>
+                    <strong>{{ team.name }}</strong><br>
+                    Вид спорта: {{ team.sport_type }}<br>
+                    <a href="{% url 'match_list' %}">Матчи команды</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>У вас нет команд. Свяжитесь с тренером!</p>
+    {% endif %}
+{% endif %}
+
+<!-- For All Users -->
+<h3>Доступные курсы</h3>
+<ul>
+    {% if courses %}
+    {% for course in courses %}
+        <li>
+            <form method="get" action="{% url 'course_detail' course.id %}">
+                <button type="submit">{{ course.title }}</button>
+            </form>
+        </li>
+    {% endfor %}
+    {% else %}
+        <p>У вас нет курсов.</p>
+    {% endif %}
+</ul>
+{% endblock %}

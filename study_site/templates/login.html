@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>Вы уже вошли в систему. <a href="{% url 'dashboard' %}">Перейти в панель</a></p>
+    {% else %}
+        <h2>Вход</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+    {% endif %}
+{% endblock %}

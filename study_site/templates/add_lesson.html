@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Добавить тренировку для курса "{{ course.title }}"</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить тренировку</button>
+</form>
+
+<a href="{% url 'course_detail' course.id %}">Вернуться к курсу</a>
+{% endblock %}

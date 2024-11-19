@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ lesson.title }}</h2>
+<p><strong>Описание:</strong> {{ lesson.description }}</p>
+<p><strong>Дата создания:</strong> {{ lesson.created_at }}</p>
+
+{% if lesson.task %}
+    <p><strong>Задание:</strong> {{ lesson.task }}</p>
+{% else %}
+    <p>Задание не указано.</p>
+{% endif %}
+
+{% if user.role == 'student' %}
+
+    <h3>Ваши ответы:</h3>
+    {% if answers %}
+        <ul>
+            {% for answer in answers %}
+                <li>{{ answer.content }} ({{ answer.created_at }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Вы еще не отправили ответ.</p>
+    {% endif %}
+{% endif %}
+
+{% if user.role == 'teacher' %}
+    <h3>Ответы студентов:</h3>
+    {% if lesson.answers.all %}
+        <ul>
+            {% for answer in lesson.answers.all %}
+                <li>
+                    {{ answer.student.username }}: {{ answer.content }}
+                    {% if answer.grade %}
+                        <strong>Оценка:</strong> {{ answer.grade }}
+                    {% else %}
+                        <a href="{% url 'grade_answer' answer.id %}">Оценить</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ответов пока нет.</p>
+    {% endif %}
+{% endif %}
+
+{% if user.role == 'student' %}
+<h3>Отправить ответ:</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+{% endif %}
+
+<a href="{% url 'course_detail' lesson.course.id %}">Вернуться к курсу</a>
+
+{% endblock %}

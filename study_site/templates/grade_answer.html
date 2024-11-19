@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Оценить ответ</h2>
+
+<p><strong>Урок:</strong> {{ answer.lesson.title }}</p>
+<p><strong>Студент:</strong> {{ answer.student.username }}</p>
+<p><strong>Ответ:</strong> {{ answer.content }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить оценку</button>
+</form>
+
+<a href="{% url 'lesson_detail' answer.lesson.id %}">Вернуться к уроку</a>
+{% endblock %}

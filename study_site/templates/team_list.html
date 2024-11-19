@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Мои команды</h2>
+<ul>
+    {% for team in teams %}
+        <li>
+            {{ team.name }} - {{ team.sport_type }}
+            <a href="{% url 'team_detail' team.id %}">Просмотреть</a> <!-- Ссылка на просмотр команды -->
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_team' %}">Добавить команду</a>
+{% endblock %}

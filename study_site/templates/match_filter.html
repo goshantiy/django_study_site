@@ -1,0 +1,28 @@
+<form method="get" action="{% url 'match_list' %}">
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Применить фильтр</button>
+</form>
+
+<h3>Список матчей</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Команда 1</th>
+            <th>Команда 2</th>
+            <th>Дата</th>
+            <th>Результат</th>
+            <th>Место</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for match in matches %}
+            <tr>
+                <td>{{ match.team_1.name }}</td>
+                <td>{{ match.team_2.name }}</td>
+                <td>{{ match.date }}</td>
+                <td>{{ match.result }}</td>
+                <td>{{ match.location }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

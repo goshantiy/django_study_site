@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ team.name }}</h2>
+<p><strong>Вид спорта:</strong> {{ team.sport_type }}</p>
+
+<h3>Игроки:</h3>
+<ul>
+    {% for player in players %}
+        <li>{{ player.username }}</li>  <!-- Здесь предполагается, что игроки - это пользователи -->
+    {% endfor %}
+</ul>
+
+<a href="{% url 'team_list' %}">Назад к списку команд</a>
+{% endblock %}

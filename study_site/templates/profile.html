@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+    <h2>Ваш профиль</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.profile_picture.value %}
+        <div>
+            <h3>Текущее изображение:</h3>
+            <img src="{{ form.profile_picture.value.url }}" alt="Profile Picture" style="max-width: 200px;">
+        </div>
+    {% endif %}
+        <button type="submit">Сохранить изменения</button>
+    </form>
+{% endblock %}

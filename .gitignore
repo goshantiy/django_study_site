@@ -122,3 +122,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+study_site/__init__.py
+
+study_site/migrations/__init__.py
+
+study_site/migrations/0001_initial.py
