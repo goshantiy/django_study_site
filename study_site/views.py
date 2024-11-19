@@ -272,10 +272,10 @@ def team_detail(request, team_id):
     return render(request, 'team_detail.html', {'team': team, 'players': players})
 
 
-from django.shortcuts import render
-from django.core.mail import send_mail
-from django.conf import settings
+
 from .forms import ContactForm
+from .models import ContactMessage
+
 
 def contact_view(request):
     if request.method == 'POST':
@@ -286,13 +286,11 @@ def contact_view(request):
             email = form.cleaned_data['email']
             message = form.cleaned_data['message']
             
-            # Отправляем email (например, администратору)
-            send_mail(
-                f'Новое сообщение от {name}',
-                message,
-                email,  # Email отправителя
-                [settings.ADMIN_EMAIL],  # Email получателя (укажите email администратора)
-                fail_silently=False,
+            # Сохраняем данные в базу
+            ContactMessage.objects.create(
+                name=name,
+                email=email,
+                message=message,
             )
             
             # Можно добавить сообщение об успешной отправке
