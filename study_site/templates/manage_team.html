@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Управление командой {{ team.name }}{% endblock %}
+
+{% block content %}
+<h2>Управление командой: {{ team.name }}</h2>
+<p>Вид спорта: {{ team.sport_type }}</p>
+
+<h3>Состав команды</h3>
+<ul>
+    {% for player in team.players.all %}
+        <li>{{ player.username }}</li>
+    {% empty %}
+        <p>В команде пока нет игроков.</p>
+    {% endfor %}
+</ul>
+
+<h3>Добавить игрока</h3>
+<form method="post">
+    {% csrf_token %}
+    <select name="student_id" required>
+        {% for student in students %}
+            <option value="{{ student.id }}">{{ student.username }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" name="add_student">Добавить</button>
+</form>
+
+<h3>Удалить команду</h3>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="delete_team" style="color: red;">Удалить команду</button>
+</form>
+
+<a href="{% url 'team_list' %}">Вернуться к списку команд</a>
+{% endblock %}

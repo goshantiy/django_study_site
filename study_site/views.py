@@ -250,6 +250,7 @@ def match_list(request):
     return render(request, 'match_list.html', {'form': form, 'matches': matches})
 
 @login_required
+@role_required('teacher')
 def create_match(request):
     if request.method == 'POST':
         form = MatchForm(request.POST)
@@ -299,3 +300,30 @@ def contact_view(request):
         form = ContactForm()
 
     return render(request, 'contact.html', {'form': form})
+
+@login_required
+def manage_team(request, team_id):
+    # Проверяем, что пользователь - тренер
+    if request.user.role != 'teacher':
+        return redirect('dashboard')  # Только тренеры могут управлять командами
+
+    team = get_object_or_404(Team, id=team_id)
+
+    # Находим студентов, не состоящих в этой команде
+    students = User.objects.filter(role='student').exclude(teams=team)
+
+    if request.method == 'POST':
+        if 'add_student' in request.POST:
+            student_id = request.POST.get('student_id')
+            student = get_object_or_404(User, id=student_id)
+            team.players.add(student)  # Добавляем студента в команду
+            return redirect('manage_team', team_id=team.id)  # Обновляем страницу
+
+        elif 'delete_team' in request.POST:
+            team.delete()  # Удаляем команду
+            return redirect('team_list')  # Перенаправляем на список команд
+
+    return render(request, 'manage_team.html', {
+        'team': team,
+        'students': students,
+    })

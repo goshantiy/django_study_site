@@ -11,5 +11,7 @@
     {% endfor %}
 </ul>
 
+<a href="{% url 'manage_team' team.id %}">Управление командой {{ team.name }}</a>
+
 <a href="{% url 'team_list' %}">Назад к списку команд</a>
 {% endblock %}
